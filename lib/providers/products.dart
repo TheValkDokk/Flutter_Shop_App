@@ -144,6 +144,4 @@ class Products with ChangeNotifier {
   //   _showFavorite = false;
   //   notifyListeners();
   // }
-
-  var _showFavorite = false;
 }

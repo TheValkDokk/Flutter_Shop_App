@@ -4,45 +4,42 @@ import '../providers/orders.dart';
 import 'package:provider/provider.dart';
 import '../widgets/order_item.dart' as ord;
 
-class OrdersScreen extends StatefulWidget {
+class OrdersScreen extends StatelessWidget {
   static const routeName = '/orders';
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState();
-}
-
-class _OrdersScreenState extends State<OrdersScreen> {
-  var _isLoad = false;
-  @override
-  void initState() {
-    Future.delayed(Duration.zero).then((_) async {
-      setState(() {
-        _isLoad = true;
-      });
-      await Provider.of<Orders>(context, listen: false).fetchOrder();
-      setState(() {
-        _isLoad = false;
-      });
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final ordersData = Provider.of<Orders>(context);
+    // final ordersData = Provider.of<Orders>(context);
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
         title: Text('Your Orders'),
       ),
-      body: _isLoad
-          ? Center(
+      body: FutureBuilder(
+        future: Provider.of<Orders>(context, listen: false).fetchOrder(),
+        builder: (ctx, dataSnapShot) {
+          if (dataSnapShot.connectionState == ConnectionState.waiting) {
+            return Center(
               child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: ordersData.orders.length,
-              itemBuilder: (ctx, i) => ord.OrderItem(ordersData.orders[i]),
-            ),
+            );
+          } else {
+            if (dataSnapShot.error != null) {
+              //....
+              //ERROR HANDLING
+              return Center(
+                child: Text('Error occurred!!'),
+              );
+            } else {
+              return Consumer<Orders>(
+                builder: (ctx, ordersData, _) => ListView.builder(
+                  itemCount: ordersData.orders.length,
+                  itemBuilder: (ctx, i) => ord.OrderItem(ordersData.orders[i]),
+                ),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 }

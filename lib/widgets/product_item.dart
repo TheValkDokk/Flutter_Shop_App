@@ -31,13 +31,13 @@ class ProductItem extends StatelessWidget {
           footer: GridTileBar(
             backgroundColor: Colors.black87,
             leading: IconButton(
-              color: Theme.of(context).accentColor,
+              color: Colors.deepOrange,
               onPressed: () => product.switchFavorite(),
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
             ),
             trailing: IconButton(
-              color: Theme.of(context).accentColor,
+              color: Colors.deepOrange,
               onPressed: () {
                 cart.addItem(product.id, product.price, product.title);
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
