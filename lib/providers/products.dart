@@ -5,8 +5,6 @@ import 'dart:convert';
 import 'product.dart';
 
 class Products with ChangeNotifier {
-  final url = Uri.parse(
-      'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product.json');
   List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -42,8 +40,14 @@ class Products with ChangeNotifier {
     // ),
   ];
 
+  final String authToken;
+
+  Products(this.authToken, this._items);
+
   Future<void> fetchPro() async {
     try {
+      final url = Uri.parse(
+          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product.json?auth=$authToken');
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
@@ -80,6 +84,8 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product p) async {
     try {
+      final url = Uri.parse(
+          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product.json?auth=$authToken');
       final response = await http.post(
         url,
         body: json.encode({
@@ -111,7 +117,7 @@ class Products with ChangeNotifier {
 
   void removeProduct(String id) async {
     final url = Uri.parse(
-        'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product/$id.json');
+        'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product/$id.json?auth=$authToken');
     http.delete(url);
     _items.removeWhere((e) => e.id == id);
     notifyListeners();
@@ -121,7 +127,7 @@ class Products with ChangeNotifier {
     final pp = _items.indexWhere((e) => e.id == id);
     if (pp >= 0) {
       final url = Uri.parse(
-          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product/$id.json');
+          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product/$id.json?auth=$authToken');
       await http.patch(url,
           body: json.encode({
             'title': p.title,
@@ -134,14 +140,4 @@ class Products with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // void showFavoriteOnly() {
-  //   _showFavorite = true;
-  //   notifyListeners();
-  // }
-
-  // void showAll() {
-  //   _showFavorite = false;
-  //   notifyListeners();
-  // }
 }

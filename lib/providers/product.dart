@@ -20,13 +20,13 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Future<void> switchFavorite() async {
+  Future<void> switchFavorite(String authToken) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
     try {
       final url = Uri.parse(
-          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product/$id.json');
+          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/product/$id.json?auth=$authToken');
       await http.patch(
         url,
         body: json.encode(

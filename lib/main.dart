@@ -20,9 +20,21 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Auth()),
-        ChangeNotifierProvider.value(value: Products()),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          create: (_) => Products('', []),
+          update: (_, auth, previousProducts) => Products(
+            auth.token,
+            previousProducts.items,
+          ),
+        ),
         ChangeNotifierProvider.value(value: Cart()),
-        ChangeNotifierProvider.value(value: Orders()),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          create: (_) => Orders('', []),
+          update: (_, auth, previousOrders) => Orders(
+            auth.token,
+            previousOrders.orders,
+          ),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (context, auth, _) => MaterialApp(
@@ -31,14 +43,13 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Lato',
             primarySwatch: Colors.blue,
           ),
-          home: ProductOverViewScreen(),
+          home: auth.isAuth ? ProductOverViewScreen() : AuthScreen(),
           routes: {
             ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
             CartScreen.routeName: (ctx) => CartScreen(),
             OrdersScreen.routeName: (ctx) => OrdersScreen(),
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
             EditProduct.routeName: (ctx) => EditProduct(),
-            AuthScreen.routeName: (ctx) => AuthScreen(),
           },
         ),
       ),

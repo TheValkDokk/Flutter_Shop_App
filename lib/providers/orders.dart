@@ -20,7 +20,8 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
-
+  final String authToken;
+  Orders(this.authToken, this._orders);
   List<OrderItem> get orders {
     return [..._orders];
   }
@@ -28,13 +29,14 @@ class Orders with ChangeNotifier {
   Future<void> fetchOrder() async {
     try {
       final url = Uri.parse(
-          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json');
+          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json?auth=$authToken');
       final response = await http.get(url);
+      final List<OrderItem> list = [];
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return;
       }
-      final List<OrderItem> list = [];
+      print(extractedData);
       extractedData.forEach((id, v) {
         list.add(
           OrderItem(
@@ -47,7 +49,7 @@ class Orders with ChangeNotifier {
                     id: e['id'],
                     title: e['title'],
                     quantity: e['quantity'],
-                    price: e['price'],
+                    price: e['price'].toDouble(),
                   ),
                 )
                 .toList(),
@@ -64,7 +66,7 @@ class Orders with ChangeNotifier {
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     try {
       final url = Uri.parse(
-          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json');
+          'https://flutter-shop-62017-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json?auth=$authToken');
       final timeSp = DateTime.now();
       final response = await http.post(
         url,

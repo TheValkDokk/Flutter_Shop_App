@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/providers/cart.dart';
+import '../providers/auth.dart';
+import '../providers/cart.dart';
 import '../providers/product.dart';
 import 'package:provider/provider.dart';
 import '../screens/product_detail_screen.dart';
@@ -8,7 +9,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context, listen: false);
-    // final product = Provider.of<Product>(context);
+    final authData = Provider.of<Auth>(context);
     return Consumer<Product>(
       builder: (_, product, __) => ClipRRect(
         borderRadius: BorderRadius.circular(15),
@@ -32,7 +33,7 @@ class ProductItem extends StatelessWidget {
             backgroundColor: Colors.black87,
             leading: IconButton(
               color: Colors.deepOrange,
-              onPressed: () => product.switchFavorite(),
+              onPressed: () => product.switchFavorite(authData.token),
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
             ),
