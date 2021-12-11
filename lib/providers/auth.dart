@@ -13,6 +13,12 @@ class Auth with ChangeNotifier {
   String _userId;
   Timer _authTimer;
 
+  String _userMail;
+
+  String get userMail {
+    return _userMail;
+  }
+
   bool get isAuth {
     return token != null;
   }
@@ -41,6 +47,7 @@ class Auth with ChangeNotifier {
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
+    _userMail = extractedUserData['userMail'];
     _token = extractedUserData['token'];
     _userId = extractedUserData['userId'];
     _expiryDate = expiryDate;
@@ -68,6 +75,7 @@ class Auth with ChangeNotifier {
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
+      _userMail = email;
       _token = responseData['idToken'];
       _userId = responseData['localId'];
       _expiryDate = DateTime.now().add(
@@ -84,6 +92,7 @@ class Auth with ChangeNotifier {
         'token': _token,
         'userId': _userId,
         'expiryDate': _expiryDate.toIso8601String(),
+        'userMail': _userMail,
       });
       prefs.setString('userData', userData);
     } catch (e) {

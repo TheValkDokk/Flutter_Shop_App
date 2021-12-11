@@ -40,6 +40,22 @@ class AppDrawer extends StatelessWidget {
             title: Text('LogOut'),
             onTap: () => Provider.of<Auth>(context, listen: false).logout(),
           ),
+          Spacer(),
+          RichText(
+            text: TextSpan(
+              text: "Logged as ",
+              style: TextStyle(color: Colors.black),
+              children: [
+                TextSpan(
+                  text: Provider.of<Auth>(context).userMail,
+                  style: TextStyle(color: Colors.blueAccent, fontSize: 18),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.05,
+          )
         ],
       ),
     );
