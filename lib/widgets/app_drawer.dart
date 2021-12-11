@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/screens/auth_screen.dart';
 import '../providers/auth.dart';
 import 'package:provider/provider.dart';
 import '../screens/user_products_screen.dart';
@@ -39,20 +38,8 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('LogOut'),
-            onTap: () {
-              Provider.of<Auth>(context, listen: false).logout();
-            },
+            onTap: () => Provider.of<Auth>(context, listen: false).logout(),
           ),
-          Spacer(
-            flex: 2,
-          ),
-          Text(
-            "Logged as : ${Provider.of<Auth>(context).userMail}",
-            style: TextStyle(fontSize: 20, overflow: TextOverflow.clip),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          )
         ],
       ),
     );
