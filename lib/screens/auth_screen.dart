@@ -1,4 +1,4 @@
-// ignore_for_file: missing_return
+// ignore_for_file: missing_return, deprecated_member_use
 
 import 'dart:math';
 
