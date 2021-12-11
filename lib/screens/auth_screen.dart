@@ -78,7 +78,10 @@ class AuthScreen extends StatelessWidget {
             //   ),
             // ),
             Expanded(
-              child: Image.asset('assets/images/auth_background.png'),
+              child: Hero(
+                tag: 'auth_logo',
+                child: Image.asset('assets/images/auth_background.png'),
+              ),
             ),
             AuthCard(),
             SizedBox(
