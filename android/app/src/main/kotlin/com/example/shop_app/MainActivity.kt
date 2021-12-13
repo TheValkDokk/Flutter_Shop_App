@@ -1,4 +1,4 @@
-package com.thevalkdokk.shop_app
+package com.valkdokk.shop_app
 
 import io.flutter.embedding.android.FlutterActivity
 
